@@ -1,6 +1,7 @@
 import torch
 import torch.nn.functional as F
 import math
+from omegaconf import OmegaConf
 import lightning.pytorch as pl
 from models.AE.maxvit_ae import MaxVITAE  # AEモデルを使用
 
@@ -11,7 +12,9 @@ class AE_LightningModule(pl.LightningModule):
 
     def __init__(self, config_path: str, lr: float = 1e-3):
         super().__init__()
-        self.model = MaxVITAE(config_path)  # AEモデルを初期化
+
+        cfg = OmegaConf.load(config_path)
+        self.model = MaxVITAE(cfg=cfg, latent_dim=cfg.latent_dim)  # AEモデルを初期化
         self.lr = lr
 
     def forward(self, x):

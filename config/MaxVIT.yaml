@@ -3,6 +3,7 @@ batch_size: 32
 num_workers: 10
 lr: 1e-3
 
+latent_dim: 64
 encoder:
   maxvit:
     img_size: 256

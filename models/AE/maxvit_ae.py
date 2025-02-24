@@ -2,7 +2,7 @@ import sys
 sys.path.append('../..')
 import torch
 import torch.nn as nn
-from omegaconf import OmegaConf
+from omegaconf import OmegaConf, DictConfig
 from models.timm.maxvit_encoder import MaxxVitEncoder
 from models.timm.maxvit_decoder import MaxxVitDecoder
 
@@ -71,19 +71,11 @@ class MaxVITAE(nn.Module):
     画像を潜在ベクトルに圧縮し、リプレイバッファに保存しやすくする。
     潜在ベクトルは Flatten (1D) して保存し、デコード時に Reshape する。
     """
-    def __init__(self, config_path: str = '../../config/MaxVIT_AE.yaml', latent_dim: int = 512):
+    def __init__(self, cfg: DictConfig, latent_dim: int = 512):
         super(MaxVITAE, self).__init__()
         
-        print(f'Loading model from {config_path}')
-        with open(config_path, 'r') as f:
-            config_content = f.read()
-            print('Model config:')
-            print('----------------')
-            print(config_content)
-            print('----------------')
         
         # YAML設定を読み込み
-        cfg = OmegaConf.load(config_path)
         encoder_cfg = cfg.encoder
         decoder_cfg = cfg.encoder
 
