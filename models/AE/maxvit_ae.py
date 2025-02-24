@@ -28,7 +28,7 @@ class MaxVITAE(nn.Module):
         # YAML設定を読み込み
         cfg = OmegaConf.load(config_path)
         encoder_cfg = cfg.encoder
-        decoder_cfg = cfg.decoder
+        decoder_cfg = cfg.encoder
 
         # エンコーダの初期化
         self.encoder = MaxxVitEncoder(encoder_cfg.maxvit, img_size=encoder_cfg.maxvit.img_size)
