@@ -1,0 +1,66 @@
+
+batch_size: 32
+num_workers: 10
+lr: 1e-3
+
+encoder:
+  maxvit:
+    img_size: 256
+    drop_rate: 0.0
+    drop_path_rate: 0.0
+    weight_init: 'vit_eff'
+
+    stem:
+      out_chs: [8, 16]
+
+      conv:
+        kernel_size: 3
+        padding: ''
+        bias: True
+        act_layer: 'silu'
+        norm_layer: 'batchnorm2d'
+        norm_eps: 1e-3
+        init_values: 1e-6
+
+
+    stage:
+      num_stages: 4
+      embed_dim: 16
+      dim_multiplier: [1, 2, 4, 8]
+      num_blocks: [1, 1, 1, 1] ## Number of blocks in each stage
+
+      transformer:
+        window_size: ???
+        grid_size: ???
+        partition_ratio: 32
+        dim_head: 16
+        attn_bias: True
+        head_first: False  # heads are interleaved (q_nh, q_hdim, k_nh, q_hdim, ....)
+        attn_drop: 0.0
+        proj_drop: 0.0
+        norm_layer_cl: layernorm
+        norm_eps: 1e-5
+        act_layer: 'gelu'
+        rel_pos_type: 'bias'
+        init_values: null 
+        expand_ratio: 4.0
+
+      conv:
+        kernel_size: 3
+        padding: ''
+        bias: True
+        act_layer: 'silu'
+        norm_layer: 'batchnorm2d'
+        norm_eps: 1e-3
+        init_values: 1e-6
+        expand_output: False
+        expand_ratio: 4.0
+        group_size: 1 ## 1 == depthwise
+        pool_type: 'avg2'
+        output_bias: True
+        stride_mode: 'dw'  ## 'pool', '1x1', 'dw'
+        pre_norm_act: True
+        attn_early: False
+        attn_layer: 'se'
+        attn_act_layer: 'silu'
+        attn_ratio: 0.0625 ## 1/16
