@@ -9,6 +9,7 @@ import argparse
 from datetime import datetime
 from omegaconf import OmegaConf
 from torchvision.datasets import CocoDetection
+from utils.timers import CudaTimer
 from modules.model.model import AE_LightningModule
 
 def load_model(checkpoint_path, config_path, device):
@@ -78,10 +79,14 @@ if __name__ == "__main__":
     img_size = cfg.encoder.maxvit.img_size
     input_tensors = preprocess_images(selected_images, img_size=img_size, device=device)
 
-    # 推論
-    with torch.no_grad():
-        reconstructed, _ = model(input_tensors)
-
+    # 推論の計測開始
+    with CudaTimer(device) as timer:
+        with torch.no_grad():
+            reconstructed, _ = model(input_tensors)
+    elapsed_time = timer.get_time()
+    
     # 画像をまとめて保存
     timestamp = datetime.now().strftime("%Y%m%d-%H%M%S")
     save_images(input_tensors, reconstructed, args.output_dir, filename=f"batch_{timestamp}.jpg")
+
+    print(f"推論時間: {elapsed_time:.4f} 秒")
