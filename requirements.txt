@@ -3,3 +3,4 @@ torchvision
 lightning
 numpy
 omegaconf
+tensorboard
