@@ -1,4 +1,5 @@
 import os
+from omegaconf import OmegaConf
 import torch
 import lightning.pytorch as pl
 import torchvision.transforms as transforms
@@ -49,7 +50,8 @@ if __name__ == "__main__":
     model = load_model(args.checkpoint, args.config)
 
     # 画像の前処理
-    img_size = args.config.encoder.maxvit.img_size
+    cfg = OmegaConf.load(args.config)
+    img_size = cfg.encoder.maxvit.img_size
     input_tensor = preprocess_image(args.input, img_size=img_size)
 
     # 推論
