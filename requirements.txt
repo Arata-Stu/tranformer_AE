@@ -4,3 +4,4 @@ lightning
 numpy
 omegaconf
 tensorboard
+pycocotools
