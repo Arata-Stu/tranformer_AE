@@ -207,6 +207,5 @@ class MaxxVitDecoder(nn.Module):
 
     def forward(self, x):
         x = self.stages(x)
-        print(x.shape)
         x = self.stem(x)
         return x
